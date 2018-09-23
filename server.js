@@ -24,19 +24,19 @@ app.use(express.static("public"));
 app.engine(
     "handlebars",
     exphbs({
-        defaultLayout: "main"
+      defaultLayout: "main"
     })
-);
-app.set("view engine", "handlebars");
+  );
+  app.set("view engine", "handlebars");
 
-app.get('/', function (req, res) {
+  app.get('/', function (req, res) {
     res.render('index');
 });
 
-mongoose.connect("mongodb://localhost/mongoHeadlines", {
-    useNewUrlParser: true
-});
+let MONGODB_URI = process.env.MONGODB_URI
 
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
 
 
 //routes
@@ -71,20 +71,20 @@ app.get("/scrape", function (req, res) {
 
         })
 
-        Promise
-            .all(allArticles).then(function (newArticles) {
+            Promise
+            .all(allArticles).then(function(newArticles)  {
                 newArticles.forEach(function (eachArticle) {
                     db.Article.create(eachArticle)
-                        .then(function (tvmoviedb) {
-                            console.log(tvmoviedb)
-                        })
-                        .catch(function (err) {
-                            console.log(err)
-                        })
-
+                    .then(function (tvmoviedb) {
+                        console.log(tvmoviedb)
+                    })
+                    .catch(function (err) {
+                        console.log(err)
+                    })
+                    
                 })
             })
-
+                
 
         // res.send('scrape complete');
 
@@ -107,29 +107,23 @@ app.get('/articles/:id', function (req, res) {
 
 app.post("/submit/:id", function (req, res) {
 
-    db.Comment.create(req.body)
-        .then(function (dbComment) {
+            db.Comment.create(req.body)
+                .then(function (dbComment) {
 
-            return db.Article.findOneAndUpdate({
-                _id: req.params.id
-            }, {
-                comment: dbComment._id
-            }, {
-                new: true
-            });
-        })
-        .then(function (tvmoviedb) {
+                return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: dbComment._id }, { new: true });
+                })
+                .then(function(tvmoviedb) {
+    
+                    res.json(tvmoviedb);
+                  })
+                  .catch(function(err) {
 
-            res.json(tvmoviedb);
-        })
-        .catch(function (err) {
+                    res.json(err);
+                  });
+              });
 
-            res.json(err);
+
+        //server
+        app.listen(PORT, function () {
+            console.log("App running on port " + PORT + "!");
         });
-});
-
-
-//server
-app.listen(PORT, function () {
-    console.log("App running on port " + PORT + "!");
-});
