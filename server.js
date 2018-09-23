@@ -8,7 +8,7 @@ const request = require('request');
 //require all models
 const db = require("./models");
 
-const port = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 
 //initialize express
 const app = express();
