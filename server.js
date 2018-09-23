@@ -37,8 +37,6 @@ mongoose.connect("mongodb://localhost/mongoHeadlines", {
     useNewUrlParser: true
 });
 
-mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI);
 
 
 //routes
