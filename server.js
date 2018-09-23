@@ -21,6 +21,12 @@ app.use(bodyParser.urlencoded({
 // express.static to serve public folder as static directory
 app.use(express.static("public"));
 
+let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines"
+
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
+
+
 app.engine(
     "handlebars",
     exphbs({
@@ -32,11 +38,6 @@ app.engine(
   app.get('/', function (req, res) {
     res.render('index');
 });
-
-let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines"
-
-mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI);
 
 
 //routes
