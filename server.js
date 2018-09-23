@@ -8,7 +8,7 @@ const request = require('request');
 //require all models
 const db = require("./models");
 
-const PORT = 3030;
+const port = process.env.PORT || 8080;
 
 //initialize express
 const app = express();
@@ -25,7 +25,6 @@ let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
-
 
 app.engine(
     "handlebars",
